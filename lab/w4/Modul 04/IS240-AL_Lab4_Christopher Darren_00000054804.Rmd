@@ -1,0 +1,162 @@
+---
+title: "IS240 Lab 4: Distribusi Peluang"
+author: "Prodi Sistem Informasi"
+output:
+  html_document: 
+    number_sections: yes
+  pdf_document: 
+    fig_height: 5
+    fig_width: 6.5
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa bisa menghitung distribusi peluang Binomial dan Gaussian (Normal).
+- Mahasiswa bisa membuat grafik distribusi peluang Binomial dan Gaussian.
+- Mahasiswa bisa melakukan uji normalitas.
+
+## Topik Praktikum
+
+- Distribusi peluang Binomial
+- Distribusi peluang Gaussian (Normal)
+- Uji normalitas
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab4_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab4_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+
+# SOAL DISTRIBUSI BINOMIAL & GAUSSIAN
+
+## Pertanyaan
+
+a. Hitung peluang seorang siswa menjawab 16 pertanyaan dengan benar bila suatu kuis pilihan ganda terdiri dari 20 pertanyaan dan tiap pertanyaan memiliki 5 pilihan jawaban. 
+b. Hitung peluang seorang siswa menjawab lebih dari 16 pertanyaan dengan benar bila suatu kuis pilihan ganda terdiri dari 20 pertanyaan dan tiap pertanyaan memiliki 5 pilihan jawaban. 
+c. Diketahui nilai kuis Statistika mengikuti distribusi Gaussian dengan mean 70 dan simpangan baku 20. Hitung peluang seorang siswa mendapatkan nilai maksimal 80. 
+d. Diketahui nilai kuis Statistika mengikuti distribusi Gaussian dengan mean 70 dan simpangan baku 20. Hitung peluang seorang siswa mendapatkan nilai di antara 60 dan 80. 
+
+## Jawaban
+```{r, message = FALSE, warning = FALSE}
+#a----
+dbinom(x  = 16, size = 20, prob = 0.20 )
+
+#b----
+pbinom(q = 16 , size = 20 , prob = 0.2 , lower.tail = FALSE)
+
+#c----
+pnorm(q = 80, mean = 70, sd = 20, lower.tail = TRUE)
+
+#d----
+#menghitung  antara 60 <= x <= 80 #
+mu <- 70
+sigma <-20
+pnorm(q = 80, mean = mu, sd = sigma)
+
+
+pnorm(q= 60, mean =  mu, sd = sigma)
+
+(ans <- pnorm(q = 80, mean = mu, sd = sigma) -  pnorm(q = 60, mean = mu, sd = sigma))
+
+```
+
+
+# SOAL DATA FOOD
+
+## SETUP 
+
+Bagian ini tidak perlu diubah. 
+
+```{r, message=FALSE, warning=FALSE}
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+
+#### Impor Data
+#Bacalah file **lab2data.xlsx** sheet **ConsumerFood**. 
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+str(food)
+head(food)
+tail(food)
+```
+
+## Pertanyaan
+
+a. Ubah variabel Region dan Location menjadi tipe *factor** dan save ke dalam data frame food. 
+b. Gambarkan histogram, density plot dan Q-Q plot untuk variabel AnnualFoodSpending. Apakah distribusinya terlihat Gaussian? Berikan label sumbu X, label sumbu Y dan judul yang sesuai. Tuliskan nama anda pada judul/ subjudul grafik. 
+c. Variabel NetIncome merupakan selisih dari AnnualHouseholdIncome dan AnnualFoodSpending. Gambarkan histogram, density plot dan Q-Q plot untuk variabel Net Income. Apakah distribusinya terlihat Gaussian? Berikan label sumbu X, label sumbu Y dan judul yang sesuai. Tuliskan nama anda pada judul/ subjudul grafik. 
+d. Lalukan uji hipotesa normalitas Shapiro-Wilk untuk variabel AnnualFoodSpending dan NetIncome.
+
+
+## Jawaban
+
+```{r, message = FALSE, warning = FALSE}
+#a-----
+  food$Region <- as.factor(food$Region)
+  food$Location <- as.factor(food$Location)
+ 
+#b----
+set.seed(1)
+
+
+judulnormal <- "Christopher Darren AnnFoodspend"
+labelx <- "Sumbu x"
+labely <- "Sumbu y"
+par(mfrow = c(1,3)) #set up agar 2 plot per baris
+hist(food$AnnualFoodSpending, main = judulnormal, xlab = labelx, ylab = labely)
+plot(density(food$AnnualFoodSpending), main = judulnormal)
+qqnorm(food$AnnualFoodSpending, main = judulnormal)
+
+
+#Berdasarkan histogram, density plot dan Q-Q plot di atas, 
+#distribusi AnnualFoodSpending itu semua datanya gaussian(normal) , dan untuk tipe distribusinya adalah dengan mengikuti distribusi binominal, gaussian(histogram)(isi dengan nama distribusi yang telah anda pelajari)
+
+
+#c
+food$NetIncome <- food$AnnualHouseholdIncome - food$AnnualFoodSpending
+
+set.seed(1)
+judulnormal <- "Christopher Darren NetIcm"
+labelx <- "Sumbu x"
+labely <- "Sumbu y"
+par(mfrow = c(1,3)) #set up agar 2 plot per baris
+hist(food$NetIncome, main = judulnormal, xlab = labelx, ylab = labely)
+plot(density(food$NetIncome), main = judulnormal)
+qqnorm(food$NetIncome, main = judulnormal)
+
+#Berdasarkan histogram, density plot dan Q-Q plot di atas, distribusi NetIncome itu semua datanya gaussian(normal) , dan untuk tipe distribusinya adalah dengan mengikuti distribusi binominal(histogram), gaussian , dan distribusi cumulatif(progres naik ke atas) (isi dengan nama distribusi yang telah anda pelajari)
+
+
+#d-----
+#untuk variabel AnnualFoodSpending
+(test1 <- stats::shapiro.test(food$AnnualFoodSpending))
+
+
+#Hipotesa null normalitas ditolak(isi dengan: ditolak/ tidak ditolak) pada alpha 5%.
+#Kesimpulan: data Annual Food Spending tidak  mengikuti distribusi gaussian (isi dengan nama distribusi yang telah anda pelajari)
+ 
+
+#untuk variabel NetIncome
+(test1 <- stats::shapiro.test(food$NetIncome))
+
+#p-value untuk uji normalitas Annual Food Spending adalah 0,1214.
+#Hipotesa null normalitas ditolak(isi dengan: ditolak/ tidak ditolak) pada alpha 5%.
+#Kesimpulan: data NetIncome tidak mengikuti (isi dengan: mengikuti/ tidak mengikuti) distribusi Gaussian (isi dengan nama distribusi yang telah anda pelajari)
+
+```

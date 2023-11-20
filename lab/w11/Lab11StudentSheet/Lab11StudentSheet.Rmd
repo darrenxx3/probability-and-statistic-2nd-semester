@@ -1,0 +1,127 @@
+---
+title: "IS240 Lab 11 Korelasi Pearson dan Korelasi Spearman"
+author: "Tan Thing Heng"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+```
+
+******************************************************
+Topik    | Korelasi
+---------|----------             
+Pertemuan| 11   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-04
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu menganalisa hubungan antar variabel pada data
+
+
+## Topik Praktikum
+
+- Korelasi Pearson
+- Korelasi Spearman
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+2. Save as file Rmd ini dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab11_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+5. Nilai masing-masing bagian adalah 20 poin.
+
+
+# Pertanyaan
+
+Kita ingin menganalisa hubungan antara Annual Food Spending dengan Annual Household Income dan Nonmortgage Household Debt pada data Consumer Food dengan menggunakan korelasi Pearson dan korelasi Spearman.
+Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **ConsumerFood** dan simpan ke dalam data frame **food**. Ubahlah variabel Region dan Location menjadi tipe factor. Simpan perubahan ini ke dalam data frame food.
+b. Lakukan analisa awal statistika deskriptif.
+   i. Buatlah summary data. 
+   ii. Gambarkan scatter plot antara variabel AnnualFoodSpending dan dua variabel independen numerik lainnya. Pola apakah yang anda lihat dalam scatter plot ini?
+c. Cek asumsi normalitas
+   i. Lakukan pengecekan normalitas untuk variabel AnnualFoodSpending, AnnualHouseholdIncome dan NonmortgageHouseholdDebt. 
+   ii. Lakukan uji hipotesa koefisien korelasi yang sesuai dengan hasil pengecekan normalitas di atas dengan menggunakan fungsi **cor.test()**. Pilihlah opsi yang sesuai. Apakah hasil uji hipotesa tersebut signifikan? Apa yang bisa anda simpulkan tentang signikansi uji hipotesa dan besaran koefisien korelasi?
+d. Hitung rank untuk masing-masing variabel numerik pada data ini. Gunakan fungsi **rank()** dan opsi *ties.method*. Hitunglah rank agar ties menggunakan rata-rata. Simpan hasil rank tersebut ke dalam data frame food dengan nama *SpendingRank*, *IncomeRank*, *DebtRank*.
+e. Buatlah sebuah fungsi untuk menghitung koefisien korelasi Spearman secara manual. Cocokkan jawaban anda dengan jawaban anda pada nomor c ii.
+
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#load library
+
+#baca data
+
+
+#Ubah tipe data
+
+
+#b-------------
+
+#i
+
+
+
+#ii
+
+#Scatter plot ..... menunjukkan pola ...
+#Scatter plot ..... menunjukkan pola ...
+
+#c------------
+
+#i
+
+
+#Hasil uji normalitas: 
+#....
+
+#ii
+
+
+#Hasil uji hipotesa korelasi:
+
+#....
+#...
+
+#d----------------
+
+
+
+
+#e-----------------
+
+
+#Fungsi spearmanrho
+
+
+#Hasil perhitungan manual untuk korelasi Spearman .... output dari R 
+#untuk uji hipotesa korelasi Spearman.
+```
+
+

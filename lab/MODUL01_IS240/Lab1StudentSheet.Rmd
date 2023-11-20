@@ -1,0 +1,78 @@
+---
+title: "IS240 Lab 1"
+date: "Genap 2019/2020"
+output:
+  pdf_document: 
+    number_sections: yes
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Pertemuan: 1   
+Judul    : Lab 1 Intro
+Nama     : CHRISTOPHER DARREN  
+NIM      : 00000054804   
+Tanggal  : 2020-01-27   
+Waktu    : maks 100 menit     
+******************************************************
+
+Petunjuk:
+
+1. Semua file pendukung dan modul dapat diunduh dari website e-learning UMN
+https://elearning.umn.ac.id. 
+2. Baca file labmodule_intro.pdf dan ketikkan contoh soal. 
+3. Mahasiswa mengetik jawaban pada file Rmd yang sudah disediakan dengan menggunakan editor RStudio.
+4. Save as file Rmd dengan format nama file jawaban adalah *IS240NamaKelas_Lab1_NamaLengkap_NIM.Rmd*. Contoh: **IS240B_Lab1_KenDedes_000000123456.Rmd**. 
+5. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+
+
+# Membaca file data
+
+
+a. Bacalah file **houseny.csv** dan simpanlah ke dalam variable bernama **house**.	
+b. Tampilkan struktur data house.
+c. Tampilkan 6 baris pertama data house.
+
+**Jawaban**    
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+#a---------
+#Tuliskan jawaban anda di sini
+library('readr')
+house <- read_csv("housesny.csv")
+
+#b-----------
+str(house)
+
+#c-----------
+head(house, 6)
+```
+
+# Membuat fungsi
+
+
+a.	Buatlah sebuah fungsi bernama BMI. Fungsi ini memiliki input berat (dalam kilogram) dan tinggi (dalam cm). Rumus BMI adalah sebagai berikut:
+$$ BMI = \frac{berat (kg)}{tinggi (m)^2}  $$
+    
+b. Hitung BMI seorang siswa dengan berat 63 kg dan tinggi badan 172 cm. 
+    
+    
+**Jawaban**    
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+#a---------
+BMI <- function(berat, tinggi)
+  {
+    BMI <- berat/((tinggi/ 100)^2)
+    return(BMI)
+  }
+
+#b-----------
+BMI(63, 172)
+
+```

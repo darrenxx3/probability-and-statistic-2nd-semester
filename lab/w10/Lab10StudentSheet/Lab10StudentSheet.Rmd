@@ -1,0 +1,120 @@
+---
+title: 'IS240 Lab 10 Regresi Linier Berganda'
+author: "Tan Thing Heng"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+```
+
+******************************************************
+Topik    | Regresi Linier Berganda
+---------|----------             
+Pertemuan| 10   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-04
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan modeling Regresi Linier Berganda
+
+## Topik Praktikum
+
+- Regresi Linier Berganda
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+- **9SLRRev1.pdf**
+- **10MLR.pdf**
+- **MLR1.R**
+- **MLR2.R**
+- **regression-cheatsheet.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab10_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+
+
+# Pertanyaan
+
+Kita ingin membuat model regresi linier berganda yang bisa menggambarkan hubungan antara AnnualFoodSpending dengan AnnualHouseholdIncome dan NonmortgageHouseholdIncome pada data Consumer Food. Semua data kecuali Region dan Lokasi memiliki satuan dolar Amerika. Location 1 = Metro, location 2 = Nonmetro.   
+Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **ConsumerFood** dan simpan ke dalam data frame **food**. 
+b. Lakukan analisa awal statistika deskriptif.
+   i. Filter data sehingga data yang digunakan adalah data Region 3 dan Location 2. Simpan data yang telah difilter ini ke dalam data frame bernama **food32**. 
+   ii. Buatlah summary data.  
+   iii. Gambarkan scatter plot antara variabel AnnualFoodSpending dan dua variabel independen numerik (2 scatter plot). Pola apakah yang anda lihat dalam scatter plot ini? Hitung koefisien korelasi Pearson antara tiap pasang variabel numerik tersebut. 
+c. Modeling
+    i. Lakukan fit model regresi linier berganda antara variabel dependen *AnnualFoodSpending* dan dua variabel independen *AnnualHouseholdIncome* dan *onmortgageHouseholdDebt* sekaligus. Simpanlah model dengan nama obyek **fit2**.
+    ii. Lakukan pengecekan asumsi regresi linier. Sebutkan pada masing-masing bagian apakah asumsi tersebut terpenuhi. 
+    iii. Apa yang dapat anda simpulkan? 
+d. Bacalah output regresi linier dan interpretasikan output tersebut. 
+   i. Apakah model regresi ini signifikan?
+   ii. Berapa persen variabilitas dalam AnnualFoodSpending yang dapat dijelaskan oleh variabilitas AnnualHouseholdIncome dan NonmortgageHouseholdDebt?
+   iii. Berapakah penambahan AnnualFoodSpending setiap penambahan 1 dollar AnnualHouseholdIncome?
+e. Apakah model ini dapat diperbaiki? Bila ya, buatlah model baru yang lebih sederhana dan namakan model ini **fit1**. Lakukan pengecekan asumsi dan berikan komentar untuk output regresinya.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+
+#baca data
+
+
+#b-------------
+
+#filter data
+
+
+#summary data
+
+#scatter plot
+
+
+#Pola apakah yang anda lihat dalam scatter plot ini? 
+#Jawaban: pola ....
+
+#koefisien korelasi = ....
+#nilai korelasi Pearson = ; hubungan linier .... yang ....
+
+#c------------
+#fit model
+
+#cek asumsi
+
+
+#d------------
+
+
+#e---------------
+
+#model yang lebih baik adalah:   
+#berdasarkan kriteria ....
+
+```
+
+

@@ -1,0 +1,153 @@
+---
+title: "IS240 Lab Sheet 2"
+author: "Prodi Sistem Informasi"
+output:
+  pdf_document: 
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document: 
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Pertemuan: 2   
+Judul    : Statistika Deskriptif Teknik Numerik   
+Nama     : Christopher Darren   
+NIM      :00000054804    
+Tanggal  : 2022-02-03   
+Waktu    : maks 100 menit     
+******************************************************
+
+## Tujuan Pembelajaran
+
+- Mahasiswa memahami sintaks dasar bahasa pemrograman R.
+- Mahasiswa memahami teknik numerik untuk statistika deskriptif.
+
+## Materi Praktikum
+
+- Sintaks dasar bahasa R
+- Statistika deskriptif dengan teknik numerik
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **1base-r-cheatsheet.pdf**, 
+- **1Syntaxcomparison-cheatsheet.pdf**,
+- **2data-import-cheatsheet**,
+- **2data-transformation_dplyr-cheatsheet.pdf**,
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**  dan
+- **3Baggott-refcard-v2.pdf**.
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab2_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab2_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+
+# SOAL 
+
+## Bacalah file **labdata.xlsx** sheet **ConsumerFood**.
+
+```{r, echo=TRUE, message=FALSE}
+    library("readxl")
+    food <- read_excel("labdata.xlsx", sheet = "ConsumerFood")
+```
+
+## Tampilkan struktur data food, kemudian tampilkan beberapa baris pertama dan beberapa baris terakhir data food.
+```{r, echo=TRUE, message=FALSE}
+    str(food)
+    head(food)
+    tail(food)
+
+```
+
+## Buatlah tabel frekuensi untuk variabel Location
+```{r, echo=TRUE, message=FALSE}
+    table(food$Location)
+
+```
+
+
+## Buatlah tabel kontinjensi 2 arah untuk variabel Location dan Region.
+```{r, echo=TRUE, message=FALSE}
+    table(food$Location, food$Region)
+```
+
+## Hitunglah skewness dan kurtosis untuk semua variabel numerik pada data food. Pastikan anda sudah memasang package **moments**.
+```{r, echo=TRUE, message=FALSE}
+    library("moments")
+    skewness(food$AnnualFoodSpending)
+    kurtosis(food$AnnualFoodSpending)
+    skewness(food$AnnualHouseholdIncome)
+    kurtosis(food$AnnualHouseholdIncome)
+    skewness(food$NonMortgageHouseholdDebt)
+    kurtosis(food$NonMortgageHouseholdDebt)
+    
+```
+
+# SOAL
+
+## Buatlah sebuah variabel baru bernama **NetIncome** yang merupakan selisih dari **AnnualFoodSpending** dan **NonMortgageHouseholdDebt**. Simpan variabel baru ini ke dalam data frame **food**. Cek bahwa variabel ini sudah tersimpan dalam data frame food dengan menampilkan beberapa baris pertama data food atau menampilkan struktur data food.
+```{r, echo=TRUE, message=FALSE}
+ 
+food$NetIncome <- (food$AnnualHouseholdIncome - food$ AnnualFoodSpending)
+head(food)
+str(food)
+
+
+```
+
+
+## Hitunglah mean, median dan simpangan baku untuk variabel **AnnualFoodSpending** dan variabel **NetIncome**.
+
+```{r, echo=TRUE, message=FALSE}
+#dengan base R (tanpa package tambahan)
+mean(food$AnnualFoodSpending)
+median(food$AnnualFoodSpending)
+sd(food$AnnualFoodSpending)
+
+mean(food$NetIncome)
+median(food$NetIncome)
+sd(food$NetIncome)
+
+#atau dengan package dplyr
+library("dplyr")
+food %>%
+  summarize(MeanSpending = mean(AnnualFoodSpending),
+            sdSpending = sd(AnnualFoodSpending),
+            MeanIncome = mean(NetIncome), 
+            MedianIncome = median(NetIncome), 
+            sdIncome = sd(NetIncome))
+```
+
+## Hitung koefisien korelasi Pearson untuk variabel **AnnualFoodSpending** dan **NetIncome** pada data **food**. Apakah ada hubungan antara kedua variabel tersebut?
+  
+```{r, echo=TRUE, message=FALSE}
+    cor(food$AnnualFoodSpending, food$NetIncome, method = "pearson") 
+
+
+```
+
+  
+## Hitunglah mean **AnnualFoodSpending** dan **NetIncome** untuk masing-masing **Location**. 
+
+```{r, echo=TRUE, message=FALSE}
+food %>%
+  group_by(Location)%>%
+  summarize(AvgSpending = mean(AnnualFoodSpending),
+            AvgIncome = mean(NetIncome),
+            AvgDebt = mean(NonMortgageHouseholdDebt))
+
+```
+
+## Apakah terdapat perbedaan AnnualFoodSpending dan NetIncome pada lokasi yang berbeda? (Lokasi 1 = Metro, lokasi 2 = bukan metro). Tuliskan hasil analisa anda.
+
+```{r, echo=TRUE, message=FALSE}
+#kesimpulan : dari tabel diatas ada perbedaan antara kedua data metro dan non metro. Untuk rata-rata pengeluaran terbesar ada pada Metro dengan jumlah 9435.933 dan di nonmetro 8261.263. Dari sini keliatan bahwa metode perhitungannya mungkin ada yang berbeda sehingga outputnya juga berbeda. untuk pendapatan jumlah terbesar masih ada pada Metro sendiri dengan jumlah 47225~ dan non metro juga 45627.26 sekian.
+
+```
+

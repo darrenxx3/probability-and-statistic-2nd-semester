@@ -1,0 +1,203 @@
+---
+title: "IS240 Lab 11 Korelasi Pearson dan Korelasi Spearman"
+author: "Tan Thing Heng"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+```
+
+******************************************************
+Topik    | Korelasi
+---------|----------             
+Pertemuan| 11   
+Nama     | Christopher Darren           
+Kelas    | IS240-AL     
+NIM      | 00000054804   
+Tanggal  | 2022-04-21
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu menganalisa hubungan antar variabel pada data
+
+
+## Topik Praktikum
+
+- Korelasi Pearson
+- Korelasi Spearman
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+2. Save as file Rmd ini dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab11_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+5. Nilai masing-masing bagian adalah 20 poin.
+
+
+# Pertanyaan
+
+Kita ingin menganalisa hubungan antara Annual Food Spending dengan Annual Household Income dan Nonmortgage Household Debt pada data Consumer Food dengan menggunakan korelasi Pearson dan korelasi Spearman.
+Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **ConsumerFood** dan simpan ke dalam data frame **food**. Ubahlah variabel Region dan Location menjadi tipe factor. Simpan perubahan ini ke dalam data frame food.
+b. Lakukan analisa awal statistika deskriptif.
+   i. Buatlah summary data. 
+   ii. Gambarkan scatter plot antara variabel AnnualFoodSpending dan dua variabel independen numerik lainnya. Pola apakah yang anda lihat dalam scatter plot ini?
+c. Cek asumsi normalitas
+   i. Lakukan pengecekan normalitas untuk variabel AnnualFoodSpending, AnnualHouseholdIncome dan NonmortgageHouseholdDebt. 
+   ii. Lakukan uji hipotesa koefisien korelasi yang sesuai dengan hasil pengecekan normalitas di atas dengan menggunakan fungsi **cor.test()**. Pilihlah opsi yang sesuai. Apakah hasil uji hipotesa tersebut signifikan? Apa yang bisa anda simpulkan tentang signikansi uji hipotesa dan besaran koefisien korelasi?
+d. Hitung rank untuk masing-masing variabel numerik pada data ini. Gunakan fungsi **rank()** dan opsi *ties.method*. Hitunglah rank agar ties menggunakan rata-rata. Simpan hasil rank tersebut ke dalam data frame food dengan nama *SpendingRank*, *IncomeRank*, *DebtRank*.
+e. Buatlah sebuah fungsi untuk menghitung koefisien korelasi Spearman secara manual. Cocokkan jawaban anda dengan jawaban anda pada nomor c ii.
+
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#load library
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+library(kableExtra)
+library(agricolae)
+library(lmtest)
+library(car)
+library(tseries)
+library(corrplot)
+library(moments)
+library(boot)
+
+install.packages("MVN")
+
+
+#baca data
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+
+str(food)
+head(food)
+tail(food)
+
+#Ubah tipe data
+   #Location <- as.factor(factor())
+   #Region <- as.factor(factor())
+   
+food$Region <- as.factor(food$Region)
+food$Location <- as.factor(food$Location)
+
+#b-------------
+
+#i
+summary(food)
+
+#ii
+par(mfrow =c (1,2))
+judul <- "foodspend ~ annualhousehold Darren"
+judul2 <- "foodspend ~ nonmortage Darren"
+plot(food$AnnualFoodSpending,food$AnnualHouseholdIncome,   main = judul)
+plot(food$AnnualFoodSpending,food$NonMortgageHouseholdDebt, main = judul2)
+
+
+
+#Scatter plot foodspend dan annualhousehold menunjukkan pola arahnya adalah positive dimana posisinya naik dari bawah ke atas garisnya, untuk dibilang linear? ya diawalan bisa tapi pas udah mau ujung ujung garisnya regang begitu. untuk kekuatan relasinya bisa dibilang ada yang kkuat(lumayan).
+
+#Scatter plot foodspend dan nonmortage menunjukkan pola arahnya ini ganda yaitu ada positive dan negative menyebar ke segala penjuru arah. dibilang linear(?) tidak... karena seperti yang saya bilang dia datanya menyebar ada yang diatas dan kebawah. untuk kekuatan relasinya lemah.
+
+#c------------
+
+#i
+#test shapiro
+(test1 <- stats::shapiro.test(food$AnnualFoodSpending))
+(test1 <- stats::shapiro.test(food$AnnualHouseholdIncome))
+(test1 <- stats::shapiro.test(food$NonMortgageHouseholdDebt))
+
+#Hasil uji normalitas: 
+#untuk food$annualfoodspending terdapat pada p-value = 0,1448 yang berarti datanya bisa diterima HO (signifikan) karena > dari 0,05
+
+#
+#untuk  food$AnnualHouseholdIncome terdapat pada p-value = 0,3138 yang berarti datanyabisa diterima HO (signifikan) karena > dari 0,05
+
+#
+# untuk food$NonMortageHouseholDebt terdapat pada p-value = 0,01883 yang berarti datanya ditolak di HO karena < dari 0,05
+
+#ii
+##metode pearson
+ans <- cor.test(food$AnnualFoodSpending, food$AnnualHouseholdIncome, method = "pearson", conf.level = 0.95)
+ans
+
+ans <- cor.test(food$AnnualFoodSpending, food$NonMortgageHouseholdDebt, method = "pearson", conf.level = 0.95)
+ans
+
+##metode Spearman
+ans <- cor.test(food$AnnualFoodSpending, food$AnnualHouseholdIncome, method = "spearman", conf.level = 0.95)
+ans
+
+ans <- cor.test(food$AnnualFoodSpending, food$NonMortgageHouseholdDebt, method = "spearman", conf.level = 0.95)
+ans
+
+
+#Hasil uji hipotesa korelasi:
+
+#untuk pearson.
+#1. Hasil uji korelasi linier Pearson(untuk FOODSPEND DENGAN ANNUALHOUSEHOLDINCOME) signifikan (p-value = < 2,2e-16 < 0,05). Koefisien korelasi r = 0,8593432  menunjukkan hubungan linier yang sangat kuat antara FOODSPEND dan ANNUALHOUSEHOLDINCOME. Makin tinggi biaya untuk FOODSPEND makin tinggi ANNUALHOUSEHOLDINCOME.
+
+#2.Hasil uji korelasi linier Pearson(untuk FOODSPEND DENGAN NONMORTAGEHOUSEHOLD) signifikan (p-value = 0,7365 < 0,05). Koefisien korelasi r = 0,0239358   menunjukkan hubungan linier yang lemah  antara FOODSPEND dan NONMORTAGEHOUSEHOLDDEBT.
+
+#untuk spearman.
+#1.Hasil uji korelasi linier Spearman (UNTUK FOODSPEND DENGAN ANNUALHOUSEHOLDINCOME )signifikan (p-value = < 2,2e-16 < 0,05). Koefisien korelasi r = 0,8448365  menunjukkan hubungan linier yang sangat kuat antara FOODSPEND dan ANNUALHOUSE.
+
+#2.Hasil uji korelasi linier Spearman (UNTUK FOODSPEND DENGAN ANNUALHOUSEHOLDINCOME )signifikan (p-value = 0,8045 < 0,05). Koefisien korelasi r = 0,01761371   menunjukkan hubungan linier yang sangat lemah (renggang) antara FOODSPEND dan ANNUALHOUSE.
+
+
+
+#d----------------#ranking--------------------
+SpendingRank <- rank(food$AnnualFoodSpending, ties.method = "average")
+SpendingRank
+
+IncomeRank <- rank(food$AnnualHouseholdIncome, ties.method = "average")
+IncomeRank
+
+DebtRank <- rank(food$NonMortgageHouseholdDebt, ties.method = "average")
+DebtRank
+
+Selisih <- food$AnnualFoodSpending - food$AnnualHouseholdIncome
+food
+
+
+#e-----------------
+
+
+#Fungsi spearmanrho
+
+n <- NROW(food)
+d <- Selisih
+
+r <- 1 - 6 * sum(d^2)/ (n * n^2 -1)
+r
+
+#Hasil perhitungan manual untuk korelasi Spearman -347328,9 output dari R 
+#untuk uji hipotesa korelasi Spearman.
+```
+
+

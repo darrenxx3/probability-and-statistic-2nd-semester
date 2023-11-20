@@ -1,0 +1,231 @@
+---
+title: "IS240 Lab 12 Student Sheet"
+author: "Tan Thing Heng (Prodi Sistem Informatika UMN)"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+library(readxl)
+```
+
+******************************************************
+Topik    | Statistika Nonparametrik untuk 2 Populasi
+---------|----------             
+Pertemuan| 12   
+Nama     | Christopher Darren         
+Kelas    | IS240-AL       
+NIM      | 00000054804    
+Tanggal  | 2022-05-12
+Waktu    | maks 100 menit
+******************************************************
+
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan estimasi dan inferensi dari sampel.
+
+
+## Topik Praktikum
+
+- Uji kesamaan 2 populasi independen dengan uji Mann-Whitney
+- Uji kesamaan 2 populasi berpasangan dengan uji Wilcoxon
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+2. Save as file Rmd ini dengan format  IS240NamaKelas_Lab12_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab12_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+5. **Nilai masing-masing bagian adalah 20 poin.**
+6. **Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.**
+
+
+# Soal Uji 2 populasi berpasangan dengan Wilcoxon Matched-Pairs Signed Rank Test (40 poin)
+
+Sebanyak 16 pelaku bisnis dari berbagai industri dimintai pendapat mengenail kondisi bisnis berdasarkan beberapa faktor. Rating dari masing-masing orang dijumlah menjadi skor optimisme bisnis. Orang-orang yang sama dikontak lagi untuk memberikan pendapat setahun kemudian. Makin tinggi skor, makin optimis orang tersebut. Gunakan uji Wilcoxon untuk menguji apakah pelaku bisnis lebih pesimis pada tahun 2019 dibandingkan dengan tahun 2018. 
+
+## Pertanyaan 
+
+a. Persiapan analisa 
+   - Impor data dari file **labdata.xlsx** sheet **optimism** dan simpan ke dalam data frame **optimism**. 
+b. Gunakan **wilcox.test()** dengan opsi **paired** untuk melakukan Wilcoxon Matched-Pairs Signed Rank Test untuk menguji apakah pelaku bisnis lebih pesimis pada tahun 2019 dibandingkan dengan tahun 2018. Tuliskan kesimpulan anda.
+
+
+## Jawaban
+
+```{r}
+#a-------
+
+#impor data
+optimism <- readxl::read_excel("labdata.xlsx", sheet = "optimism")
+
+str(optimism)
+head(optimism)
+tail(optimism)
+
+
+#b----------
+wilcox.test(optimism$score2018, optimism$score2019, paired = TRUE)
+
+#H0: skor 2018 ditolak <= skor 2019 karena skornya lebih kecil dari p-valuenya = < 0,05. (isi dengan =, <= atau >=)
+#Ha: skor 2018 ... skor 2019 (isi dengan tidak sama dgn, < atau >)
+
+#Hasil uji hipotesa:
+shapiro.test(optimism$score2018)
+shapiro.test(optimism$score2019)
+
+#Kesimpulan:
+#untuk test optimisimscore2018 datanya berdistribusi normal karena p-valuenya lebih besa dari 0,05 sedangkan untuk test optimisimscore2019 datanya berdistribusi tidak normal kaernan p-valuenya lebih kecil dari 0,05.
+```
+
+# Soal Uji 2 populasi independen dengan Uji Mann-Whitney U (60 poin)
+
+Kita ingin menganalisa data Hospital untuk menggali apakah terdapat perbedaan jumlah admissions dan jumlah personnel pada rumah sakit umum (*general medical hospitals*) dan rumah sakit jiwa (*psychiatric hospitals*).  
+
+
+## Hospital Info (Black hal 14)
+
+HOSPITAL DATABASE
+This database contains observations for 11 variables on U.S. hospitals. These variables include Geographic Region, Control, Service, Number of Beds, Number of Admissions, Census, Number of Outpatients, Number of Births, Total Expenditures, Payroll Expenditures, and Personnel.
+
+The region variable is coded from 1 to 7, and the numbers represent the following regions:
+
+- 1 = South
+- 2 = Northeast
+- 3 = Midwest
+- 4 = Southwest
+- 5 = Rocky Mountain
+- 6 = California
+- 7 = Northwest
+
+Control is a type of ownership. Four categories of control are included in the database:
+
+- 1 = government, nonfederal
+- 2 = nongovernment, not-for-profit
+- 3 = for-profit
+- 4 = federal government
+
+Service is the type of hospital. The two types of hospitals
+used in this database are:
+
+- 1 = general medical
+- 2 = psychiatric
+The total expenditures and payroll variables are in units of $1,000.
+
+American Hospital Association https://www.aha.org/
+
+
+
+## Pertanyaan 
+
+a. Impor data
+   - Panggil semua package yang diperlukan. 
+   - Impor data dari file **labdata.xlsx** sheet **Hospital** dan simpan ke dalam data frame **hospital**. 
+   - Ubahlah variabel GeogRegion, Control dan Service menjadi tipe factor. Simpan perubahan ini ke dalam data frame hospital. 
+   - Tampilkan struktur data untuk mengecek perubahan dan tipe variabel.
+
+b. Filter data dan uji normalitas
+   - Pisahkan data menjadi 2 bagian berdasarkan service. Simpan hasil filter rumah sakit umum ke dalam data frame bernama **hsg** dan hasil rumah sakit jiwa ke dalam data frame bernama **hsp**.
+   - Ujilah normalitas variabel Admissions dan Personnel untuk data frame hsg dan hsp. Tuliskan kesimpulan anda dari hasil uji normalitas.
+   - Apakah t-test dapat digunakan untuk uji 2 populasi independen dalam data ini? Sebutkan alasan anda.
+   
+c. Gunakan fungsi **wilcox()** untuk menguji 2 hipotesa berikut ini dengan **uji Mann-Whitney U**. Tuliskan hasil uji hipotesa di atas dan kesimpulan yang anda peroleh.
+   - Ha: admission rumah sakit umum lebih banyak daripada admission rumah sakit jiwa.
+   - Ha: personel rumah sakit umum lebih banyak daripada personal rumah sakit jiwa.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#panggil library yang diperlukan
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+library(kableExtra)
+library(agricolae)
+library(lmtest)
+library(car)
+library(tseries)
+library(corrplot)
+library(moments)
+library(boot)
+
+#impor data
+hospital <- readxl::read_excel("labdata.xlsx", sheet = "Hospital")
+
+str(hospital)
+head(hospital)
+tail(hospital)
+
+#ubah tipe variabel
+hospital$GeogRegion <- as.factor(hospital$GeogRegion)
+hospital$Control <- as.factor(hospital$Control)
+hospital$Service <- as.factor(hospital$Service)
+#tampilkan struktur
+View(hospital)
+
+
+#b------------
+#filter data
+hsg <- filter(hospital, hospital$Service == '1')
+hsp <- filter(hospital, hospital$Service == '2')
+View(hsg)
+View(hsp)
+
+#uji normalitas
+shapiro.test(hsg$Admissions)
+shapiro.test(hsg$Personnel)
+shapiro.test(hsp$Admissions)
+shapiro.test(hsp$Personnel)
+
+#Hasil uji normalitas: Distribusi .....Admission dan Personnel untuk RSU dan RSJ .... Gaussian (isi dengan mengikuti/ tidak mengikuti)
+
+#kesimpulannya saya jelaskan 1 1:
+##1 untuk normalitas hsg$admission , distribusi ditolak (tidak normal) karena p-valuenya 1,275e-10 yang artinya minus pangkat 10. dan untuk distribusi gaussiannya tidak mengikuti Gaussian.
+
+##2 untuk normalitas hsg$Personnel , distribusi ditolak (tidak normal) karena p-valuenya 2,186e-13 yang artinya minus pangkat 13. dan untuk distribusi gaussiannya tidak mengikuti Gaussian.
+
+##3 untuk normalitas hsp$Admissions , distribusi ditolak (tidak normal) karena p-valuenya 0,0006453 yang artinya tidak melewati 0,05. dan untuk distribusi gaussiannya tidak mengikuti Gaussian.
+
+##4 untuk normalitas hsp$Personnel , distribusi ditolak (tidak normal) karena p-valuenya 0,0001086 yang artinya tidak melewati 0,05. dan untuk distribusi gaussiannya tidak mengikuti Gaussian.
+
+#t-test bisa digunakan karena datasamplenya ditolak 0,05
+#c------------
+
+#uji Mann-Whitney U
+wilcox.test(hsg$Admissions, hsp$Admissions, alternative = "less")
+wilcox.test(hsg$Personnel, hsp$Personnel, alternative = "less")
+
+
+
+#H0: Admission RSU <= Admission RSJ (isi dengan =, <= atau >=)
+#Ha: Admission RSU > Admission RSJ (isi dengan tidak sama dgn, < atau >)
+
+
+
+
+#H0:Personnel RSU <= Personnel RSJ (isi dengan =, <= atau >=)
+#Ha: Personnel RSU > Personnel RSJ (isi dengan tidak sama dgn, < atau >)
+
+#Kesimpulan:
+#Admission RSU diterima Admission RSJ (p-value = 1)
+#Personnel RSU diterima Personnel RSJ (p-value = 0,9999)
+```
+
+

@@ -1,0 +1,220 @@
+---
+title: 'IS240 Lab 10 Regresi Linier Berganda'
+author: "Tan Thing Heng"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+```
+
+******************************************************
+Topik    | Regresi Linier Berganda
+---------|----------             
+Pertemuan| 10   
+Nama     | Christopher Darren      
+Kelas    | IS 240 AL      
+NIM      | 00000054804    
+Tanggal  | 2022-04-14
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan modeling Regresi Linier Berganda
+
+## Topik Praktikum
+
+- Regresi Linier Berganda
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+- **9SLRRev1.pdf**
+- **10MLR.pdf**
+- **MLR1.R**
+- **MLR2.R**
+- **regression-cheatsheet.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab10_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+
+
+# Pertanyaan
+
+Kita ingin membuat model regresi linier berganda yang bisa menggambarkan hubungan antara AnnualFoodSpending dengan AnnualHouseholdIncome dan NonmortgageHouseholdIncome pada data Consumer Food. Semua data kecuali Region dan Lokasi memiliki satuan dolar Amerika. Location 1 = Metro, location 2 = Nonmetro.   
+Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **ConsumerFood** dan simpan ke dalam data frame **food**. 
+b. Lakukan analisa awal statistika deskriptif.
+   i. Filter data sehingga data yang digunakan adalah data Region 3 dan Location 2. Simpan data yang telah difilter ini ke dalam data frame bernama **food32**. 
+   ii. Buatlah summary data.  
+   iii. Gambarkan scatter plot antara variabel AnnualFoodSpending dan dua variabel independen numerik (2 scatter plot). Pola apakah yang anda lihat dalam scatter plot ini? Hitung koefisien korelasi Pearson antara tiap pasang variabel numerik tersebut. 
+c. Modeling
+    i. Lakukan fit model regresi linier berganda antara variabel dependen *AnnualFoodSpending* dan dua variabel independen *AnnualHouseholdIncome* dan *onmortgageHouseholdDebt* sekaligus. Simpanlah model dengan nama obyek **fit2**.
+    ii. Lakukan pengecekan asumsi regresi linier. Sebutkan pada masing-masing bagian apakah asumsi tersebut terpenuhi. 
+    iii. Apa yang dapat anda simpulkan? 
+d. Bacalah output regresi linier dan interpretasikan output tersebut. 
+   i. Apakah model regresi ini signifikan?
+   ii. Berapa persen variabilitas dalam AnnualFoodSpending yang dapat dijelaskan oleh variabilitas AnnualHouseholdIncome dan NonmortgageHouseholdDebt?
+   iii. Berapakah penambahan AnnualFoodSpending setiap penambahan 1 dollar AnnualHouseholdIncome?
+e. Apakah model ini dapat diperbaiki? Bila ya, buatlah model baru yang lebih sederhana dan namakan model ini **fit1**. Lakukan pengecekan asumsi dan berikan komentar untuk output regresinya.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#load library
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+library(kableExtra)
+library(agricolae)
+library(lmtest)
+library(car)
+library(tseries)
+library(corrplot)
+
+#baca data
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+
+
+str(food)
+head(food)
+tail(food)
+
+#b-------------
+
+#filter data
+food32 <- filter(food, food$Region == 'S', food$Location == 'NonMetro')
+View(food32)
+
+#summary data
+summary(food32)
+
+#scatter plot
+par(mfrow =c (1,2))
+judul <- "foodspend ~ annualhousehold Darren"
+judul2 <- "foodspend ~ nonmortage Darren"
+plot(food32$AnnualFoodSpending,food32$AnnualHouseholdIncome,   main = judul)
+plot(food32$AnnualFoodSpending,food32$NonMortgageHouseholdDebt, main = judul2)
+
+
+#Pola apakah yang anda lihat dalam scatter plot ini? 
+#Jawaban: untuk 2 scatter plot ini akan saya jelaskan 1 1
+#foodspend dengan foodhouseholdincome : arahnya adalah positive dimana posisinya naik dari bawah ke atas garisnya, untuk dibilang linear? ya diawalan bisa tapi pas udah mau ujung ujung garisnya regang begitu. untuk kekuatan relasinya bisa dibilang ada yang kkuat dan tidak.
+
+#foodspend dengan non mortage : arahnya ini ganda yaitu ada positive dan negative menyebar ke segala penjuru arah. dibilanag linear(?) tidak karena seperti yang saya bilang dia datanya menyebar ada yang diatas dan kebawah. untuk kekuatan relasinya lemah.
+
+cor(food32$AnnualFoodSpending , food32$AnnualHouseholdIncome, method = "pearson")
+cor(food32$AnnualFoodSpending , food32$NonMortgageHouseholdDebt, method = "pearson")
+#koefisien korelasi = ....
+
+#nilai korelasi Pearson = ;
+#untuk food32spending dan household ada di angka
+##[1] 0,8099432
+#hubungan linier yang sudah digambarkan ini sangat kuat karena mendekati angka 1 
+
+
+#untuk food32spending dan nonmortage ada di angka
+##[1] 0,1159537
+
+#hubungan linier yang sudah digambarkan ini lemah karena banyak yang renggang datanya dan dibawah angka < 1
+
+#c------------
+#fit model
+#fit2 <- lm(food32$AnnualFoodSpending ~ food32$AnnualHouseholdIncome, data = food32)
+#summary(fit2)
+#fit2 <- lm(food32$AnnualFoodSpending ~ food32$NonMortgageHouseholdDebt, data = food32)
+#summary(fit2)
+
+
+fit2 <- lm(AnnualFoodSpending ~ AnnualHouseholdIncome + NonMortgageHouseholdDebt, data = food32)
+summary(fit2)
+
+
+#cek asumsi
+par(mfrow = c(2,2))
+plot(fit2)
+par(mfrow = c (1,1))
+
+
+
+#plot 1: Residual vs fitted in ini sifatnya heterogenitas tapi dia agak kebawah walaupun ada lewat garis tapi datanya tidak bagus.
+#plot 2: Normal QQ = masih agak normal walaupun diujungnya bengkok, dan bersifat homoskedastic
+#plot 3: Scale-Location = masih normal/terpenuhi karena garisnya masih berada pada garis lurus          dan bersifat homoskedastic.
+#plot 4: Residual vs leverage = cook distancenya dibawah jadi datanya tidak begitu bagus.
+
+
+#uji otokorelasi: ...
+dwtest(fit2)
+
+#uji homoskedastisitas: ...
+bptest(fit2)
+
+
+#uji normalitas: ....
+
+(test1 <- stats::shapiro.test(fit2$residuals))
+
+
+#d------------
+
+#i. Model signifikan?  Jawab: Ya. dilihat dari karena autokorelasinya lebih besar dari 0  nol yaitu 0.6762 p valuenya  serta p-value itu normal.(telah dibuktikan oleh BP test serta VW test)
+
+
+#ii. variabilitas ...
+var(food32$AnnualFoodSpending)
+var(food32$AnnualHouseholdIncome)
+var(food32$NonMortgageHouseholdDebt)
+
+
+
+#iii. penambahan ....
+
+
+#e---------------
+
+#model yang lebih baik adalah:   
+#berdasarkan kriteria ....
+fit1 <- lm(food32$AnnualFoodSpending ~  food32$AnnualHouseholdIncome, data = food32)
+summary(fit1)
+
+
+par(mfrow = c(2,2))
+plot(fit1)
+par(mfrow = c (1,1))
+
+#uji otokorelasi: ...
+dwtest(fit1)
+
+#uji homoskedastisitas: ...
+bptest(fit1)
+
+
+#uji normalitas: ....
+
+(test1 <- stats::shapiro.test(fit1$residuals))
+####
+```
+
+

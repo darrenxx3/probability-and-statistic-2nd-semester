@@ -1,0 +1,173 @@
+---
+title: "Lab 5: Uji Mean Satu Populasi"
+author: "Prodi Sistem Informasi"
+date: "2020"
+output:
+  pdf_document: 
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document: 
+    number_sections: yes
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Topik    | Uji Hipotesa Mean Satu Populasi        
+---------|----------             
+Pertemuan| 5   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-02
+Waktu    | maks 100 menit     
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa bisa menghitung selang kepercayaan dan uji hipotesa untuk satu mean populasi dengan menggunakan z-test.
+- Mahasiswa bisa melakukan uji hipotesa untuk satu mean populasi dengan menggunakan t-test.
+
+## Topik Praktikum
+
+- Selang Kepercayaan untuk satu mean populasi
+- Uji Hipotesa untuk satu mean populasi
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab5_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab5_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+
+# Soal Uji Hipotesa Satu Mean Populasi Tanpa Data Mentah
+
+## Pertanyaan
+
+Lakukan langkah-langkah berikut ini untuk melakukan uji hipotesa satu mean populasi. Diketahui rata-rata sampel 36 zak semen adalah 50,1 kg. Bila diketahui rata-rata berat sebuah zak semen mengikuti distribusi Gaussian dengan mean = 50 kg dan simpangan baku populasi 0,5 kg, ujilah hipotesa bahwa rata-rata berat populasi zak semen adalah 50 kg. 
+
+a. Carilah nilai kritis $z_{\alpha/2}$ untuk uji hipotesa dua sisi dengan $\alpha = 0.1$.
+b. Buatlah sebuah fungsi bernama transformasiz. Fungsi ini akan menghitung z score dari sebuah variabel acak Gaussian.  Fungsi ini memiliki input nilai xbar (mean sampel), mu (mean populasi), sigma (simpangan baku populasi) dan n (ukuran sampel). Output dari fungsi ini adalah variabel z. **Variabel z ini merupakan test statistic untuk uji hipotesa satu mean populasi bila simpangan baku populasi (sigma) diketahui.**
+c. Bandingkan test statistic z dengan nilai kritis. 
+d. Gunakan rumus transformasiz ini dan fungsi pnorm untuk menghitung p-value. p-value adalah peluang mendapatkan sampel seperti ini atau lebih buruk bila hipotesa null benar. $p-value = 2P(Z \ge |z|)$ untuk uji hipotesa 2 sisi.  
+
+## Jawaban
+
+```{r}
+#a-----
+
+
+#b------
+
+#c------
+
+
+#d-----
+
+```
+
+
+# Soal Uji Hipotesa Satu Mean Populasi Dengan Data Mentah
+
+## SETUP
+
+Bagian ini tidak perlu diubah. 
+
+```{r, message=FALSE, warning=FALSE}
+
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+
+#### Impor Data
+#Bacalah file **lab2data.xlsx** sheet **ConsumerFood**. 
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+str(food)
+head(food)
+tail(food)
+
+#### Ubah tipe data numerik menjadi tipe faktor
+food$Region <- as.factor(food$Region)
+food$Location <- as.factor(food$Location)
+
+#### Buatlah sebuah variabel beranam DisposableIncome. 
+# Simpan variabel ini ke dalam data frame food. 
+food$DisposableIncome <- food$AnnualHouseholdIncome - food$NonMortgageHouseholdDebt
+```
+
+## Pertanyaan
+
+a. Lakukan uji hipotesa normalitas untuk semua variabel numerik pada data food. Uji hipotesa mean satu populasi dengan menggunakan fungsi **t-test()** memiliki syarat bahwa data harus mengikuti distribusi Gaussian.
+b. Lakukan uji hipotesa satu mean populasi untuk menguji bahwa mean AnnualFoodSpending lokasi 1 adalah USD 10.000. Gunakan tingkat signifikansi 10% ($\alpha = 0,1$). Simpanlah hasil uji hipotesa ini ke dalam obyek bernama *ttspending1*. 
+c. Apakah hasil uji hipotesa ini signifikan? Apa yang dapat anda simpulkan?
+**Hint: Suatu uji hipotesa dikatakan signifikan pada tingkat signifikansi $\alpha$ bila $p-value < alpha$. Bila $p-value < \alpha$, maka hipotesa null $(H_0)$ ditolak pada tingkat signikansi tersebut karena terdapat cukup bukti pada data.**
+d. Tampilkan komponen obyek ttspending1 dengan menggunakan fungsi **names()**. Tampilkan nilai komponen selang kepercayaan 99% untuk mean AnnualFoodSpending. Apa yang dapat anda simpulkan dari selang kepercayaan tersebut? Apakah hasilnya konsisten dengan hasil uji hipotesa?
+**Hint: Suatu uji hipotesa dikatakan signifikan pada tingkat signifikansi $\alpha$ bila selang kepercayaan untuk $\mu$ tidak mengandung nilai $\mu_0$.** 
+e. Lakukan uji hipotesa satu sisi untuk menguji apakah mean AnnualFoodSpending lokasi 1 lebih besar dari 10.000 USD. Apa yang bisa anda simpulkan?
+
+
+## Jawaban
+
+```{r, message = FALSE, warning = FALSE}
+
+#a-----
+
+# Variabel .... (isi dengan mengikuti/ tidak mengikuti) distribusi Gaussian
+# Variabel .... (isi dengan mengikuti/ tidak mengikuti) distribusi Gaussian
+# Variabel .... (isi dengan mengikuti/ tidak mengikuti) distribusi Gaussian
+# Variabel .... (isi dengan mengikuti/ tidak mengikuti) distribusi Gaussian
+
+
+#b----
+#filter untuk mendapatkan data AnnualFoodSpending lokasi 1
+
+#uji hipotesa
+
+
+#c-----
+
+
+
+# Hasil uji hipotesa .... (isi dengan signifikan/ tidak signifikan) pada alfa 0,1. 
+# p-value = .... (isi dengan =, atau < atau > ) alpha = 0,1 
+# Hipotesa null .... (isi dengan ditolak/ tidak ditolak) pada tingkat signifikansi 0.1
+# Kesimpulan: data pada sampel ... (isi dengan menunjukkan cukup bukti/ tidak cukup bukti)
+# bahwa mean AnnualFoodSpending lokasi 1 .... (isi dengan sama/ tidak sama dengan) 10000 USD.
+
+#d----
+
+
+
+# mu_0 = 10000 .... (isi dengan termasuk/ tidak termasuk) dalam selang kepercayaan .... (copy paste nilai selang kepercayaan di sini).
+# Hipotesa null (H_0) ... (isi dengan ditolak/ tidak ditolak) pada tingkat signifikansi 0,1. 
+# Kesimpulan yang didapatkan dengan memeriksa selang kepercayaan
+# ... (isi dengan konsisten/ tidak konsisten) 
+# dengan kesimpulan yang didapatkan dari uji hipotesa, yaitu
+# data pada sampel menunjukkan ... (isi dengan cukup bukti/ tidak cukup bukti) 
+# bahwa mean AnnualFoodSpending lokasi 1 .... dengan 10000 USD.
+
+#e-----
+
+
+
+# KESIMPULAN
+# p-value = ...... (copy paste p-value dari output dan isi dengan =, < atau >) alpha = 0,1
+# ... (isi dengan Terdapat cukup bukti/ tidak cukup bukti) untuk menolak H0 pada tingkat signifikansi 10%.
+# KESIMPULAN: mean populasi AnnualFoodSpending .... 10000 USD.
+```
+
+

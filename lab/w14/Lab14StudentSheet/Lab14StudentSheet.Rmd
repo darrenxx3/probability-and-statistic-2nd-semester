@@ -1,0 +1,114 @@
+---
+title: "Lembar Jawaban Mahasiswa Lab 14"
+author: "Tan Thing Heng (Prodi Sistem Informatika UMN)"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: no
+    toc_depth: 4
+  word_document:
+    toc_depth: '4'
+  html_document:
+    number_sections: no
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+library(readxl)
+```
+
+******************************************************
+Topik    | Review
+---------|----------             
+Pertemuan| 14   
+Nama     | Christopher Darren        
+Kelas    | IS 240 AL       
+NIM      | 00000054804    
+Tanggal  | 2022-05-21
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan estimasi dan inferensi dari sampel.
+- Mahasiswa mampu menganalisa hubungan antar variabel pada data.
+
+## Topik Praktikum
+
+- Materi pertemuan 8 sampai dengan 13
+
+## Petunjuk Umum
+
+1. Save as file Rmd ini dengan format  IS240NamaKelas_Lab14_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab14_KenDedes_000000123456.Rmd**. 
+2. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date. 
+3. **Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab.**
+4. **Gunakan tingkat signifikansi 1% untuk semua uji hipotesa.**
+
+
+# Soal 
+
+1. (50 poin) 
+   a. Persiapan uji hipotesa
+      - Panggil semua package yang diperlukan. 
+      - Impor data dari file **labdata.xlsx** sheet **jobexperience** dan simpan ke dalam data frame **jobexperience**. Ubahlah data frame ini menjadi tipe obyek **matrix** dengan nama obyek **jobmatrix**. 
+   b. Uji hipotesa
+      - Tuliskan hipotesa null dan hipotesa alternatif untuk uji independensi antara variabel **job** dan variabel **experience**.
+      - Lakukan uji hipotesa independensi dan tuliskan kesimpulannya.
+      
+2. (50 poin) 
+   a. Persiapan uji hipotesa
+      - Impor data dari file **labdata.xlsx** sheet **singlefamilyhome** dan simpan ke dalam data frame **sfhome**. Data ini adalah data harga rumah *single-family home* di kota Denver dan kota Hartford.
+      - Lakukan uji normalitas untuk harga rumah di Denver dan harga rumah di Hartford.
+   b. Uji hipotesa
+      - Lakukan uji hipotesa untuk menguji apakah terdapat perbedaan antara harga rumah di Denver dan harga rumah di Hartford. Tuliskan kesimpulan anda.
+   
+
+
+# Jawaban
+
+```{r}
+#1--------------
+#a------
+#panggil library yang diperlukan
+
+#impor data
+
+
+#b Tuliskan H0 dan Ha----------
+#H0: ....
+#Ha: ....
+
+# Uji independensi-----------
+
+
+#p-value = ....  alpha = 0,01
+#H0 .... pada tingkat signifikansi 1%.
+
+#Kesimpulan: ......
+#Pada data: ...
+#Pada data: ...
+
+
+#2----------
+#a impor data -----------
+
+
+#b uji hipotesa------------
+
+#H0: ....
+#Ha: ....
+
+
+#p-value = .... alpha = 0,01.
+#H0 ..... pada tingkat signifikansi ....
+
+#Kesimpulan:
+#.....
+```
+
+

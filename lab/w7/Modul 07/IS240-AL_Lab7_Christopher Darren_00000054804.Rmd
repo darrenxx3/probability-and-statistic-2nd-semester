@@ -1,0 +1,138 @@
+---
+title: "IS240 Lab 7: Review"
+author: "Prodi Sistem Informasi"
+output:
+  pdf_document: 
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document: 
+    number_sections: yes
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Topik    | Review
+---------|----------             
+Pertemuan| 7   
+Nama     | Christopher Darren          
+Kelas    | IS-240 -AL     
+NIM      | 00000054804
+Tanggal  | 2022-03-10
+Waktu    | maks 100 menit     
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa bisa melakukan review untuk persiapan UTS.
+
+## Topik Praktikum
+
+- Statistika Deskriptif
+- Inferensi untuk 1 mean populasi
+- Inferensi untuk 2 mean populasi
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab6_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab7_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+
+# Pertanyaan
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **Black8_19** dan simpan ke dalam data frame **thickness**.
+b. Gunakan grafik yang sesuai untuk menggambarkan distribusi ketebalan plat.
+c. Hitung point estimate untuk mean ketebalan plat.
+d. Hitung selang kepercayaan 95% untuk mean ketebalan plat dan hitung error selang kepercayaan ini.
+e. Jelaskan arti selang kepercayaan untuk mean ketebalan plat.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+
+thickness <- readxl::read_excel("labdata.xlsx", sheet = "Black8_19")
+str(thickness)
+head(thickness)
+tail(thickness)
+
+
+
+#b-------------
+set.seed(1)
+judulnormal <- "Christopher Darren thickness"
+labelx <- "Sumbu x"
+labely <- "Sumbu y"
+hist(thickness$'2.4066000000000001', main = judulnormal, xlab = labelx, ylab = labely)
+
+
+#c------------
+mean(thickness$'2.4066000000000001')
+
+#d------------
+ketebalan <- thickness
+t.test(thickness,var.equal = T)
+
+#e---------------
+#di sumbu x khususnya 2.4 - 2.6 memiliki thickness yang sama
+#dengan jumlah di sumbu y adalah 3#
+#berlakku juga untuk 2.2 -2.4 memiliki thickness yang sama
+
+```
+
+
+# Pertanyaan
+
+a. Impor data sheet **Black10_25** dan simpan ke dalam data frame **remodeling**.
+b. Gambarkan grafik yang sesuai untuk membandingkan biaya remodeling dan resale.
+c. Hitung point estimate untuk rata-rata biaya remodeling dan uji hipotesa bahwa rata-rata biaya remodeling adalah USD 23.400 pada alfa 1%.
+d. Hitung selang kepercayaan untuk rata-rata biaya remodeling dan jelaskan artinya untuk rata-rata biaya remodeling.
+e. Ujilah hipotesa 2 mean populasi (paired) bahwa remodeling membuat nilai jual rumah lebih tinggi. Gunakan alfa 1%. 
+
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+remodeling <- readxl::read_excel("labdata.xlsx", sheet = "Black10_25") #panggil data#
+str(remodeling)
+head(remodeling)
+tail(remodeling)
+
+#b-------------
+boxplot(remodeling$Cost , remodeling$Resale , main = "perbandingan biaya remodeling dan resale oleh Christopher Darren" )
+
+#c------------
+alpha <- 0.1
+rata1 <- mean(remodeling$Cost)
+(tt <- t.test(remodeling$Cost, mu = rata1, conf.level = 1-alpha, alternative = "two.sided"))
+#d------------
+t.test(remodeling$Cost,var.equal = T)
+
+#e---------------
+alpha <- 0.1
+gptt <-t.test(remodeling$Cost, remodeling$Resale, paired =  TRUE, alternative = "greater")
+gptt
+```
+
+

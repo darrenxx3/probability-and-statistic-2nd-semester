@@ -1,0 +1,200 @@
+---
+title: "Lembar Jawaban Mahasiswa Lab 14"
+author: "Tan Thing Heng (Prodi Sistem Informatika UMN)"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: no
+    toc_depth: 4
+  word_document:
+    toc_depth: '4'
+  html_document:
+    number_sections: no
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+library(readxl)
+```
+
+******************************************************
+Topik    | Review
+---------|----------             
+Pertemuan| 14   
+Nama     | Christopher Darren        
+Kelas    | IS 240 AL       
+NIM      | 00000054804    
+Tanggal  | 2022-05-21
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan estimasi dan inferensi dari sampel.
+- Mahasiswa mampu menganalisa hubungan antar variabel pada data.
+
+## Topik Praktikum
+
+- Materi pertemuan 8 sampai dengan 13
+
+## Petunjuk Umum
+
+1. Save as file Rmd ini dengan format  IS240NamaKelas_Lab14_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab14_KenDedes_000000123456.Rmd**. 
+2. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date. 
+3. **Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab.**
+4. **Gunakan tingkat signifikansi 1% untuk semua uji hipotesa.**
+
+
+# Soal 
+
+1. (50 poin) 
+   a. Persiapan uji hipotesa
+      - Panggil semua package yang diperlukan. 
+      - Impor data dari file **labdata.xlsx** sheet **jobexperience** dan simpan ke dalam data frame **jobexperience**. Ubahlah data frame ini menjadi tipe obyek **matrix** dengan nama obyek **jobmatrix**. 
+   b. Uji hipotesa
+      - Tuliskan hipotesa null dan hipotesa alternatif untuk uji independensi antara variabel **job** dan variabel **experience**.
+      - Lakukan uji hipotesa independensi dan tuliskan kesimpulannya.
+      
+2. (50 poin) 
+   a. Persiapan uji hipotesa
+      - Impor data dari file **labdata.xlsx** sheet **singlefamilyhome** dan simpan ke dalam data frame **sfhome**. Data ini adalah data harga rumah *single-family home* di kota Denver dan kota Hartford.
+      - Lakukan uji normalitas untuk harga rumah di Denver dan harga rumah di Hartford.
+   b. Uji hipotesa
+      - Lakukan uji hipotesa untuk menguji apakah terdapat perbedaan antara harga rumah di Denver dan harga rumah di Hartford. Tuliskan kesimpulan anda.
+   
+
+
+# Jawaban
+
+```{r}
+#1--------------
+#a------------
+#panggil library yang diperlukan
+#load library
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+library(kableExtra)
+library(agricolae)
+library(lmtest)
+library(car)
+library(tseries)
+library(corrplot)
+library(moments)
+library(boot)
+
+#impor data
+jobexperience <- readxl::read_excel("labdata.xlsx", sheet = "jobexperience")
+jobexperience
+
+str(jobexperience)
+head(jobexperience)
+tail(jobexperience)
+
+#mengubah tipe data
+(jobmatrix <- as.matrix(jobexperience[, 2:5]))
+rownames(jobmatrix) <- jobexperience[[1]]
+jobmatrix
+
+
+#b Tuliskan H0 dan Ha----------
+#H0: Pekerjaan dengan pengalaman tidak ada hubungan 1 dengan yang lainnya.
+#Ha: Pekerjaan dengan pengalaman ada hubungan 1 dengan yang lainnya.
+
+# Uji independensi-----------
+chisq.test(jobmatrix)
+chisq.test(jobexperience)
+
+#p-value lebih kecil dari  alpha = 0,01
+#H0 DITERIMA pada tingkat signifikansi 1%.
+
+#Kesimpulan: ......
+#Pada data: jobmatrix terdapat value 
+#Pada data: jobexperiecen tidak terdapat value.
+
+
+#2----------
+#a impor data -----------
+sfhome <- readxl::read_excel("labdata.xlsx", sheet = "singlefamilyhome")
+sfhome
+
+str(sfhome)
+head(sfhome)
+tail(sfhome)
+View(sfhome)
+
+#uji normalitas
+test1 <- stats::shapiro.test(sfhome$Denver)
+test1
+
+test2 <- stats::shapiro.test(sfhome$Hartford)
+test2
+#Hasil normalitas test1 = hasil uji shapiro terhadap home denver menunjukkan p- value di 0,4495 yang berarti H0nya DITERIMA pada alpha 0.05 
+#Hasil normalitas test2 = hasil uji shaprio terhadap home  Hartford menunjukkan p-value di 0,2246 yang berarti H0nya DITERIMA pada alpha 0.05
+
+#varians
+apply(sfhome, 2, var, na.rm = TRUE)
+#Variansnya bermacam macam
+
+#hitung CV
+cv <- function(x){
+cv <- sd(x)/mean(x)
+return (cv)
+}
+apply(sfhome, 2, cv)
+#CV nya ada perbedaan yakni untuk denver NA dan hatford adalah 0,01486509 
+
+
+#uji test ANOVA
+results <- aov(sfhome$Denver ~ sfhome$Hartford)
+summary(results)
+ #Tabel ANOVA menunjukkan nilai p-value yang lebih besar > 1%.Besar peluangnya kita mendapatkan mean sampel rumah Denver pada kedua lokasi ini seperti ini atau lebih buruk bila hipotesa null benar pada tingkat signifikansi 1%. Pada contoh ini hipotesa null kita Diterima pada tingkat signifikansi 1%. Kita simpulkan minimal terdapat satu mean populasi yang berbeda.
+
+#b uji hipotesa------------
+#menggunakan fit model test
+model <- lm(sfhome$Denver~ sfhome$Hartford , data = sfhome)
+summary(model)
+
+par(mfrow = c(2,2))
+plot(model)
+par(mfrow = c(1,1))
+
+#plot 1: tidak terpenuhi (Residual vs fitted) karena garisnya agak bengkok
+#plot 2: terpenuhi(normal Q Q) walaupun datanya tidak rapat.
+#plot 3: agak terpenuhi Scale location karena masih dalam garis lurus
+#plot 4:  tidak terpenuhi karena garisnya naik turun ke bawah(Residualvs leverage)
+
+#H0: Perbedaan lokasi tidak ada pengaruh terhadap harga rumah.
+#Ha: Perbedaan lokasi ada pengaruh terhadap harga rumah.
+
+#chisquarer pearson test
+chisq.test(sfhome$Denver)
+chisq.test(sfhome$Hartford)
+
+#p-value = < 2,2e-16(untuk chisquere test) alpha = 0,01.
+#H0 nya DITOLAK pada tingkat signifikansi 1%.
+
+#untuk test chisquare sfhomedenver gagal karena ada 2 data yang tidak diketahui NA
+#sedangkan sfhome$hartford mempunyai value.
+
+#uji man whittney
+wilcox.test(sfhome$Denver, sfhome$Hartford, alternative = "less")
+wilcox.test(sfhome$Denver, sfhome$Hartford, alternative = "greater")
+
+#kesimpulan untuk uji man whitneny wilcox
+# p-value = 0,2625 , dan alpha 0.01 artinya H0 nya DITERIMA pada tingkat signifikansi 1%(ini ketika melakukan uji dengan Less-than).
+# p-value = 0,7522, dan alpha 0.01 artinya H0 nya DITERIMA pada tingkat signifkansi 1% (ini ketika melakukan uji dengan Greater-than).
+
+#Kesimpulan:
+#semua uji hipotesa antara rumah denver dan harford saya tidak bisa menjelaskan secara spesifik bahwa ada angka sekian yang bisa membedakan....., yang pentingnya
+#semua test yang sudah dilakukan ada perbedaan p-value (tidak ada data ganda).Contoh sederhananya ketika melakukan uji VARIANS dari data yang ada di atas ketika sudah diuji hasilnya berbeda.
+```
+
+

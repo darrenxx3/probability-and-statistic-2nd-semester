@@ -1,0 +1,124 @@
+---
+title: "IS240 Lab 6: Uji Mean Dua Populasi"
+author: "Prodi Sistem Informasi"
+output:
+  pdf_document: 
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document: 
+    number_sections: yes
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Topik    | Uji Hipotesa Mean Dua Populasi        
+---------|----------             
+Pertemuan| 6   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-02
+Waktu    | maks 100 menit     
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa bisa melakukan uji hipotesa untuk dua mean populasi dengan menggunakan t-test.
+
+## Topik Praktikum
+
+- Selang Kepercayaan dan Uji Hipotesa untuk 2 mean populasi
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab6_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab6_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+# Soal Data Food
+
+## SETUP
+
+Bagian ini tidak perlu diubah. 
+
+```{r, message=FALSE, warning=FALSE}
+
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(dplyr)
+
+#### Impor Data
+#Bacalah file **labdata.xlsx** sheet **ConsumerFood**. 
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+str(food)
+head(food)
+tail(food)
+
+#### Ubah tipe data numerik menjadi tipe faktor
+food$Region <- as.factor(food$Region)
+food$Location <- as.factor(food$Location)
+
+#### Buatlah sebuah variabel beranam DisposableIncome. 
+# Simpan variabel ini ke dalam data frame food. 
+food$DisposableIncome <- food$AnnualHouseholdIncome - food$NonMortgageHouseholdDebt
+```
+
+## Pertanyaan
+
+a. Lakukan uji hipotesa normalitas untuk semua variabel numerik pada data food. Uji hipotesa mean satu populasi dengan menggunakan fungsi **t-test()** memiliki syarat bahwa data harus mengikuti distribusi Gaussian.
+b. Hitunglah mean sampel, simpangan baku sampel dan CV (Coefficient of Variation) untuk AnnualFoodSpending lokasi 1 dan AnnualFoodSpending lokasi 2. 
+c. Gambarkan boxplot yang membandingkan AnnualFoodSpending lokasi 1 dan lokasi 2. Apa yang dapat anda simpulkan mengenai varians pada lokasi 1 dan varians pada lokasi 2? Gunakan kesimpulan pada bagian b dan c ini untuk memilih uji hipotesa yang sesuai pada langkah d. 
+d. Lakukan uji hipotesa dua mean populasi untuk menguji hipotesa bahwa mean AnnualFoodSpending lokasi 1 dan sama dengan mean AnnualFoodSpending lokasi 2. Gunakan tingkat signifikansi 10% ($\alpha = 0,1$). Simpanlah hasil uji hipotesa ini ke dalam obyek bernama *ttdiffspending*. Apakah hasil uji hipotesa ini signifikan? Apa yang dapat anda simpulkan?
+**Hint: Suatu uji hipotesa dikatakan signifikan pada tingkat signifikansi $\alpha$ bila $p-value < alpha$. Bila $p-value < \alpha$, maka hipotesa null $(H_0)$ ditolak pada tingkat signikansi tersebut karena terdapat cukup bukti pada data untuk menolak H_0.**
+**Hint: Suatu uji hipotesa untuk 2 mean populasi dikatakan signifikan pada tingkat signifikansi $\alpha$ bila selang kepercayaan untuk $\mu_A - \mu_B$ tidak mengandung nilai $\mu_0$.** 
+e. Lakukan uji hipotesa satu sisi untuk  Gunakan hipotesa satu sisi yang sesuai untuk menguji apakah selisih antara mean AnnualFoodSpending lokasi 1 dan lokasi 2 lebih besar dari 1000 USD. Tuliskan kesimpulan anda. 
+
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----
+
+# ..... mengikuti distribusi Gaussian 
+
+
+#b----
+#filter untuk mendapatkan AnnualFoodSpending lokasi 1
+
+#filter untuk mendapatkan AnnualFoodSpending lokasi 2
+
+
+
+#c-------------
+
+
+#d-----
+
+
+# KESIMPULAN
+# .... H0 pada alpha 0,1.
+# annual food spending lokasi 1 dan annual spending lokasi 2 .....
+
+#e----
+
+# KESIMPULAN
+# .... H0 pada alpha 0,1.
+# Selisih annual food spending lokasi 1 dan lokasi 2 .....
+```
+
+

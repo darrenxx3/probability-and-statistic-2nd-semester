@@ -1,0 +1,192 @@
+---
+title: 'IS240 Lab 9 Regresi Linier Sederhana'
+author: "Tan Thing Heng"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+```
+
+******************************************************
+Topik    | Regresi Linier Sederhana
+---------|----------             
+Pertemuan| 9   
+Nama     | Christopher Darren     
+Kelas    | IS-240AL       
+NIM      | 00000054804    
+Tanggal  | 2022-04-07
+Waktu    | maks 100 menit
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan modeling Regresi Linier Sederhana.
+
+## Topik Praktikum
+
+- Regresi Linier Sederhana
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+- **regression-cheatsheet.pdf**,     
+- **2RTutorialTTHHypothesisTesting.pdf**
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab9_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+
+
+# Pertanyaan
+
+Kita ingin membuat model regresi linier sederhana yang bisa menggambarkan hubungan antara Annual Income dengan Annual Spending pada data Consumer Food. Setelah melakukan modeling RLS, kita ingin melakukan estimasi dan prediksi food spending berdasarkan net income. Semua data kecuali Region dan Lokasi memiliki satuan dolar Amerika.    
+Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.
+
+## Impor data
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **ConsumerFood** dan simpan ke dalam data frame **food**. Buatlah sebuah variabel baru bernama **NetIncome** yang merupakan selisih dari AnnualHouseholdIncome dan NonMortgageHouseholdDebt. Simpan variabel baru ini ke dalam data frame food. 
+
+## Analisa awal
+
+b. Lakukan analisa awal statistika deskriptif.
+   i. Filter data sehingga data yang digunakan adalah data Region 1 dan Location 1. Simpan data yang telah difilter ini ke dalam data frame bernama **food11**. 
+   ii. Buatlah summary data. 
+   iii. Gambarkan scatter plot antara variabel AnnualFoodSpending dan AnnualNetIncome. Pola apakah yang anda lihat dalam scatter plot ini?
+   iv. Hitung koefisien korelasi Pearson antara kedua variabel ini. Apa yang bisa anda simpulkan dari nilai $r$?
+   
+## Modeling
+
+c. Modeling
+    i. Lakukan fit model regresi linier. 
+    ii. Lakukan pengecekan asumsi regresi linier. Sebutkan pada masing-masing bagian apakah asumsi tersebut terpenuhi. 
+    iii. Apa yang dapat anda simpulkan? 
+
+## Interpretasi Output
+
+d. Bacalah output regresi linier dan interpretasikan output tersebut. 
+   i. Apakah model regresi ini signifikan?
+   ii. Berapa persen variabilitas dalam AnnualFoodSpending yang dapat dijelaskan oleh variabilitas NetIncome?
+   iii. Berapakah penambahan AnnualFoodSpending setiap penambahan 1 dollar NetIncome?
+
+## Prediksi 
+
+e. Apakah model ini dapat dipakai untuk prediksi (berdasarkan jawaban anda pada bagian sebelumnya)? Bila ya, buatlah prediksi AnnualFoodSpending untuk NetIncome 25 ribu dollar dan 50 ribu dolar beserta confidence interval dan prediction intervalnya. Gunakan level 95%.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#load library
+#### Panggil semua package yang diperlukan.
+library(readxl) #membaca file Excel
+library(nortest) #uji normalitas
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr)
+library(kableExtra)
+library(agricolae)
+library(lmtest)
+library(car)
+library(tseries)
+library(corrplot)
+
+#baca data
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+
+
+str(food)
+head(food)
+tail(food)
+#buat variabel NetIncome
+
+food$NetIncome <- (food$AnnualHouseholdIncome - food$NonMortgageHouseholdDebt)
+head(food)
+str(food)
+#b-------------
+
+#filter data
+#food11 =data.frame(food$Region, food$Location)
+#filter( food11, food$Region == "NE" , food$Location == "Metro")
+#View(food11)
+
+food11 <- filter(food, food$Region == 'NE', food$Location == 'Metro')
+View(food11)
+
+#summary data
+summary(food11)
+#scatter plot
+judul <- "Scatter plot Annual Food Spending vs Net Income"
+plot(food11$AnnualFoodSpending , food11$NetIncome, main = judul)
+
+#Pola apakah yang anda lihat dalam scatter plot ini? 
+#Jawaban: pola High degree of pattern(linear)
+
+#koefisien korelasi
+cor(food11$AnnualFoodSpending , food11$NetIncome , method = "pearson")
+#nilai korelasi Pearson = adalah 0,8682928; hubungan yang berarti bahwa korelasinya kuat karena > 98% koefiesiennya
+
+#c------------
+#fit model
+model <- lm(food11$AnnualFoodSpending ~ food11$NetIncome , data = food11)
+summary(model)
+
+#cek asumsi
+par(mfrow = c(2,2))
+plot(model)
+par(mfrow = c(1,1))
+
+#plot 1: tidak terpenuhi (Residual vs fitted) karena garisnya agak bengkok
+#plot 2: tidak terpenuhi(normal Q Q) karena tingkat errornya tinggi dan sudah melewati batas garis lurus.
+#plot 3: agak terpenuhi Scale location karena masih dalam garis lurus
+#plot 4:  tidak terpenuhi karena garisnya nurun ke bawah(Residualvs leverage)
+
+
+#uji otokorelasi: ...
+dwtest(model)
+
+#uji homoskedastisitas: ...
+bptest(model)
+
+#uji normalitas: ....
+
+shapiro.test(food11)
+#d------------
+
+#i. Model signifikan?  Jawab: ya/ tidak: Ya. dilihat dari karena autokorelasinya lebih besar dari 0  nol serta p-value itu normal.(telah dibuktikan oleh BP test serta VW test)
+
+
+#ii. variabilitas ...
+var(food11$AnnualFoodSpending)
+
+#iii. penambahan ....
+
+#e---------------
+
+#Model dapat dipakai untuk prediksi karena: bisa saja datanya berubah ubah untuk kedepannya
+#Model signifikan, asumsi-asumsi terpenuhi, R^2 cukup tinggi.
+
+#prediksi 
+predict(model, newdata = data.frame(food11$AnnualFoodSpending), interval = "prediction", conf.level = 0.95)
+
+predict(model, newdata = data.frame(food11$NetIncome), interval = "prediction", conf.level = 0.95)
+
+
+
+```
+
+

@@ -1,0 +1,187 @@
+---
+title: "IS240 Lab 12 Student Sheet"
+author: "Tan Thing Heng (Prodi Sistem Informatika UMN)"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+library(readxl)
+```
+
+******************************************************
+Topik    | Statistika Nonparametrik untuk 2 Populasi
+---------|----------             
+Pertemuan| 12   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-04
+Waktu    | maks 100 menit
+******************************************************
+
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan estimasi dan inferensi dari sampel.
+
+
+## Topik Praktikum
+
+- Uji kesamaan 2 populasi independen dengan uji Mann-Whitney
+- Uji kesamaan 2 populasi berpasangan dengan uji Wilcoxon
+
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.        
+2. Save as file Rmd ini dengan format  IS240NamaKelas_Lab12_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab12_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date.
+4. Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab. 
+5. **Nilai masing-masing bagian adalah 20 poin.**
+6. **Gunakan tingkat signifikansi 5% untuk semua uji hipotesa.**
+
+
+# Soal Uji 2 populasi berpasangan dengan Wilcoxon Matched-Pairs Signed Rank Test (40 poin)
+
+Sebanyak 16 pelaku bisnis dari berbagai industri dimintai pendapat mengenail kondisi bisnis berdasarkan beberapa faktor. Rating dari masing-masing orang dijumlah menjadi skor optimisme bisnis. Orang-orang yang sama dikontak lagi untuk memberikan pendapat setahun kemudian. Makin tinggi skor, makin optimis orang tersebut. Gunakan uji Wilcoxon untuk menguji apakah pelaku bisnis lebih pesimis pada tahun 2019 dibandingkan dengan tahun 2018. 
+
+## Pertanyaan 
+
+a. Persiapan analisa 
+   - Impor data dari file **labdata.xlsx** sheet **optimism** dan simpan ke dalam data frame **optimism**. 
+b. Gunakan **wilcox.test()** dengan opsi **paired** untuk melakukan Wilcoxon Matched-Pairs Signed Rank Test untuk menguji apakah pelaku bisnis lebih pesimis pada tahun 2019 dibandingkan dengan tahun 2018. Tuliskan kesimpulan anda.
+
+
+## Jawaban
+
+```{r}
+#a-------
+
+#impor data
+
+
+#b----------
+
+#H0: skor 2018 ... skor 2019 (isi dengan =, <= atau >=)
+#Ha: skor 2018 ... skor 2019 (isi dengan tidak sama dgn, < atau >)
+
+#Hasil uji hipotesa:
+#Kesimpulan:
+
+```
+
+# Soal Uji 2 populasi independen dengan Uji Mann-Whitney U (60 poin)
+
+Kita ingin menganalisa data Hospital untuk menggali apakah terdapat perbedaan jumlah admissions dan jumlah personnel pada rumah sakit umum (*general medical hospitals*) dan rumah sakit jiwa (*psychiatric hospitals*).  
+
+
+## Hospital Info (Black hal 14)
+
+HOSPITAL DATABASE
+This database contains observations for 11 variables on U.S. hospitals. These variables include Geographic Region, Control, Service, Number of Beds, Number of Admissions, Census, Number of Outpatients, Number of Births, Total Expenditures, Payroll Expenditures, and Personnel.
+
+The region variable is coded from 1 to 7, and the numbers represent the following regions:
+
+- 1 = South
+- 2 = Northeast
+- 3 = Midwest
+- 4 = Southwest
+- 5 = Rocky Mountain
+- 6 = California
+- 7 = Northwest
+
+Control is a type of ownership. Four categories of control are included in the database:
+
+- 1 = government, nonfederal
+- 2 = nongovernment, not-for-profit
+- 3 = for-profit
+- 4 = federal government
+
+Service is the type of hospital. The two types of hospitals
+used in this database are:
+
+- 1 = general medical
+- 2 = psychiatric
+The total expenditures and payroll variables are in units of $1,000.
+
+American Hospital Association https://www.aha.org/
+
+
+
+## Pertanyaan 
+
+a. Impor data
+   - Panggil semua package yang diperlukan. 
+   - Impor data dari file **labdata.xlsx** sheet **Hospital** dan simpan ke dalam data frame **hospital**. 
+   - Ubahlah variabel GeogRegion, Control dan Service menjadi tipe factor. Simpan perubahan ini ke dalam data frame hospital. 
+   - Tampilkan struktur data untuk mengecek perubahan dan tipe variabel.
+
+b. Filter data dan uji normalitas
+   - Pisahkan data menjadi 2 bagian berdasarkan service. Simpan hasil filter rumah sakit umum ke dalam data frame bernama **hsg** dan hasil rumah sakit jiwa ke dalam data frame bernama **hsp**.
+   - Ujilah normalitas variabel Admissions dan Personnel untuk data frame hsg dan hsp. Tuliskan kesimpulan anda dari hasil uji normalitas.
+   - Apakah t-test dapat digunakan untuk uji 2 populasi independen dalam data ini? Sebutkan alasan anda.
+   
+c. Gunakan fungsi **wilcox()** untuk menguji 2 hipotesa berikut ini dengan **uji Mann-Whitney U**. Tuliskan hasil uji hipotesa di atas dan kesimpulan yang anda peroleh.
+   - Ha: admission rumah sakit umum lebih banyak daripada admission rumah sakit jiwa.
+   - Ha: personel rumah sakit umum lebih banyak daripada personal rumah sakit jiwa.
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+#panggil library yang diperlukan
+
+#impor data
+
+#ubah tipe variabel
+
+
+#tampilkan struktur
+
+
+#b------------
+#filter data
+
+
+#uji normalitas
+
+
+
+#Hasil uji normalitas: Distribusi .....Admission dan Personnel untuk RSU dan RSJ .... Gaussian (isi dengan mengikuti/ tidak mengikuti)
+#t-test ..... digunakan karena .....
+
+#c------------
+
+#uji Mann-Whitney U
+
+
+
+#H0: Admission RSU ... Admission RSJ (isi dengan =, <= atau >=)
+#Ha: Admission RSU ... Admission RSJ (isi dengan tidak sama dgn, < atau >)
+
+
+
+
+#H0:Personnel RSU ... Personnel RSJ (isi dengan =, <= atau >=)
+#Ha: Personnel RSU ... Personnel RSJ (isi dengan tidak sama dgn, < atau >)
+
+#Kesimpulan:
+#Admission RSU ... Admission RSJ (p-value = ...)
+#Personnel RSU ... Personnel RSJ (p-value = ...)
+```
+
+

@@ -1,0 +1,230 @@
+---
+title: "Jawaban IS240 Lab 3: Grafik Statistika Deskriptif"
+author: "Prodi Sistem Informasi"
+output:
+  html_document: 
+    number_sections: yes
+  pdf_document: 
+    fig_height: 5
+    fig_width: 6.5
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Pertemuan: 3   
+Judul    : Statistika Deskriptif Teknik Grafik   
+Nama     :    
+NIM      :    
+Tanggal  : 2020-02
+Waktu    : maks 100 menit     
+******************************************************
+
+## Tujuan Pembelajaran
+
+- Mahasiswa bisa membuat grafik untuk statistika deskriptif dengan R.
+
+## Materi Praktikum
+
+- Diagram Batang (Bar Chart)
+- Diagram Pareto
+- Boxplot
+- Histogram
+- Diagram Acak (Scatter Plot)
+
+## Petunjuk Umum
+
+1. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2data-visualization_ggplot2-cheatsheet.pdf**
+- **2qplot_cheatsheet.pdf**
+- **1Syntaxcomparison-cheatsheet.pdf**,
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,  
+
+Cheat sheet lab 1 dan 2   
+
+- **2data-transformation_dplyr-cheatsheet.pdf**,
+- **2data-import-cheatsheet**,
+- **1base-r-cheatsheet.pdf** dan
+- **3Baggott-refcard-v2.pdf**.
+
+2. Save as file Rmd dengan format  IS240NamaKelas_Lab3_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab3_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. 
+
+
+# SETUP
+
+## Panggil semua package yang diperlukan.
+```{r, message=FALSE}
+library(readxl) #membaca file Excel
+library(moments) #skewness dan kurtosis
+library(nortest) #uji normalitas
+library(qualityTools) #diagram Pareto
+library(ggplot2) #grafik dgn package ggplot2
+library(dplyr) #untuk filter
+```
+
+
+## Impor Data
+
+Bacalah file **labdata.xlsx** sheet **ConsumerFood**. Tampilkan struktur data food, kemudian tampilkan beberapa baris pertama dan beberapa baris terakhir data food. Kode berikut ini akan membaca file 
+
+```{r, message=FALSE}
+food <- readxl::read_excel("labdata.xlsx", sheet = "ConsumerFood")
+str(food)
+head(food)
+tail(food)
+```
+
+## Ubah Tipe Data
+
+Gunakan fungsi *as.factor()* untuk merubah tipe data Location dan Region menjadi tipe factor.
+
+```{r}
+
+
+```
+
+# SOAL VARIABEL KATEGORIKAL (NONNUMERIK)
+
+## Bar Chart: Distribusi Frekuensi Variabel Kategorikal
+
+Buatlah diagram batang untuk tabel frekuensi Location di bawah ini. Berikan judul *Distribusi Frekuensi Lokasi oleh Ken Dedes 0123456*, label sumbu X *Lokasi* dan label sumbu Y *Frekuensi, dan label legend Lokasi *1 = Metro* dan *2 = NonMetro*. Ganti Ken Dedes dan 0123456 dengan nama dan NIM anda.
+
+```{r, message=FALSE}
+#JANGAN UBAH BAGIAN INI
+(frekuensi <- table(food$Location))
+```
+
+```{r, message=FALSE}
+#base R
+
+```
+
+## Stacked Bar Chart
+
+Buatlah Stacked Bar Plot untuk variabel Location dan Region dengan judul dan label yang sama dengan diagram batang sebelumnya. 
+```{r, message=FALSE}
+#JANGAN UBAH BAGIAN INI
+(frekuensi <- table(food$Location, food$Region))
+```
+
+```{r, message=FALSE}
+#base R
+
+```
+
+## Side-by-side Bar Chart
+
+Buatlah Grouped Bar Chart (side-by-side bar chart) untuk variabel Location. Gunakan label yang sama dengan bar chart sebelumnya. Gunakan 2 warna yang berbeda untuk diagram ini. 
+
+```{r, message=FALSE}
+#base R
+
+```
+
+## Diagram Pareto
+
+Buatlah diagram Pareto untuk variabel Region. Region manakah yang paling sering tampil dalam data? Region manakah yang paling jarang tampil dalam data?
+
+```{r, message=FALSE}
+(frekuensi <- table(food$Region))
+qualityTools::paretoChart(frekuensi)
+#Paling sering muncul: region ...
+#Paling jarang muncul: region ...
+```
+
+# SOAL VARIABEL NUMERIK
+
+Variabel **NetIncome** adalah selisih dari **AnnualHouseholdIncome** dan **NonMortgageHouseholdDebt**. 
+
+```{r, message=FALSE}
+#JANGAN UBAH BAGIAN INI
+food$NetIncome <- food$AnnualHouseholdIncome - food$AnnualFoodSpending
+
+moments::skewness(food$AnnualFoodSpending)
+moments::kurtosis(food$AnnualFoodSpending)
+skewness(food$AnnualHouseholdIncome)
+kurtosis(food$AnnualHouseholdIncome)
+```
+
+## Histogram: Distribusi Data Numerik (1 Variable)
+
+```{r}
+#JANGAN UBAH BAGIAN INI
+moments::skewness(food[,c("AnnualFoodSpending","NetIncome")])
+moments::kurtosis(food[,c("AnnualFoodSpending","NetIncome")])
+```
+
+Buatlah histogram untuk variabel *AnnualFoodSpending*. Apakah distribusi data pada variabel ini mengikuti distribusi Gaussian (Normal)? Gunakan output dari lab 2 (skewness dan kurtosis) untuk menjawab pertanyaan ini. Berikan judul dengan format *Histogram Annual Food Spending (USD) oleh Ken Dedes 0123456* dan label sumbu X *Annual Food Spending*. Gunakan argumen *xlim* agar angka pada sumbu X ditampilkan mulai dari 0 sampai 20 ribu.
+
+```{r}
+
+```
+
+## Density Plot: Distribusi Data Numerik (1 Variable)
+
+Hint: gunakan fungsi *density()*.
+
+
+```{r}
+
+# Distribusi AnnualFoodSpening .... distribusi ...
+```
+
+## Scatter Plot: Hubungan antara 2 variabel numerik
+
+Pada lab 2, kita sudah menghitung korelasi antara variabel **AnnualFoodSpending** dan **NetIncome** dan ditemukan korelasi yang kuat dan searah antara kedua variabel tersebut (r = 0,86). 
+
+```{r, message=FALSE}
+#JANGAN UBAH BAGIAN INI
+cor(food$AnnualFoodSpending, food$NetIncome, method = "pearson")
+```
+
+Gambarkan diagram acak (scatter plot) untuk variabel **AnnualFoodSpending** dan **NetIncome** pada data **food**. Berikan judul *Scatter plot Annual Food Spending vs Net Income*. 
+
+```{r, message=FALSE}
+
+```
+
+## Scatter Plot untuk Lokasi 1 dan 2
+
+Gunakan argumen *pch* dan *col* yang berbeda untuk lokasi 1 dan lokasi 2. Berikan legenda yang menjelaskan arti simbol dan warna tersebut.
+
+```{r}
+
+```
+
+
+# SOAL VARIABEL NUMERIK DAN KATEGORIKAL
+
+## Boxplot: Distribusi Variable Numerik Berdasarkan Variabel Kategorikal
+
+Gambarkan boxplot untuk membandingkan Annual Food Spending pada lokasi Metro dan Nonmetro.
+
+```{r, message=FALSE}
+#base R
+
+
+#Median Spending lokasi 1 (Metro) ... spending lokasi 2
+#Range Spending lokasi 1 ... range spending lokasi 2
+```
+
+## Boxplot
+
+Gambarkan boxplot untuk membandingkan Annual Food Spending pada keempat Region. 
+
+```{r, message=FALSE}
+#base R
+
+
+#Median Spending terendah pada region ...
+#Median Spending tertinggi pada region ...
+#Range Spending tertinggi pada region ...
+#Region yang memiliki outlier: region ...
+```

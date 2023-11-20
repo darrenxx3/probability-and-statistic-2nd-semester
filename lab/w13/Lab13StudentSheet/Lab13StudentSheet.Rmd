@@ -1,0 +1,161 @@
+---
+title: "Lembar Jawaban Siswa untuk Lab 13"
+author: "Tan Thing Heng (Prodi Sistem Informatika UMN)"
+institute: "Prodi Sistem Informatika UMN"
+output:
+  pdf_document:
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document:
+    number_sections: yes
+  word_document:
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
+library(readxl)
+```
+
+******************************************************
+Topik    | Analisa Data Kategorikal
+---------|----------             
+Pertemuan| 13   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-05
+Waktu    | maks 100 menit
+******************************************************
+
+#Pendahuluan
+## Tujuan Pembelajaran
+
+- Mahasiwa mampu menganalisa kesesuaian distribusi.
+- Mahasiswa mampu menganalisa hubungan antar variabel pada data.
+
+
+## Topik Praktikum
+
+- Uji kesamaan proporsi (**test for homogeneity of proportions**)
+- Uji independensi 2 variabel kategorikal (**test for independence in 2-way contingency table**)
+
+
+## Petunjuk Umum
+
+1. Gunakan file **RTutorialTHypothesisTestTTH2018** dan **discretedataanalysis.R** untuk referensi.
+2. Save as file Rmd ini dengan format  IS240NamaKelas_Lab13_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab13_KenDedes_000000123456.Rmd**. 
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. Submission tidak diterima sesudah cut-off date. 
+4. **Setiap bagian hanya boleh dikerjakan setelah bagian sebelumnya dijawab.**
+5. **Gunakan tingkat signifikansi 10% untuk semua uji hipotesa.**
+
+
+## Hospital Info (Black hal 14)
+
+HOSPITAL DATABASE
+This database contains observations for 11 variables on U.S. hospitals. These variables include Geographic Region, Control, Service, Number of Beds, Number of Admissions, Census, Number of Outpatients, Number of Births, Total Expenditures, Payroll Expenditures, and Personnel.
+
+The region variable is coded from 1 to 7, and the numbers represent the following regions:
+
+- 1 = South
+- 2 = Northeast
+- 3 = Midwest
+- 4 = Southwest
+- 5 = Rocky Mountain
+- 6 = California
+- 7 = Northwest
+
+Control is a type of ownership. Four categories of control are included in the database:
+
+- 1 = government, nonfederal
+- 2 = nongovernment, not-for-profit
+- 3 = for-profit
+- 4 = federal government
+
+Service is the type of hospital. The two types of hospitals
+used in this database are:
+
+- 1 = general medical
+- 2 = psychiatric
+The total expenditures and payroll variables are in units of $1,000.
+
+American Hospital Association https://www.aha.org/
+
+
+# Soal 
+
+**Gunakan tingkat signifikansi 10% untuk semua uji hipotesa.**
+
+1. (20 poin) Impor data
+   a. Panggil semua package yang diperlukan. 
+   - Impor data dari file **labdata.xlsx** sheet **Hospital** dan simpan ke dalam data frame **hospital**. 
+   b. Ubahlah variabel GeogRegion, Control dan Service menjadi tipe factor. Simpan perubahan ini ke dalam data frame hospital. 
+   - Tampilkan struktur data untuk mengecek perubahan dan tipe variabel.
+2. (40 poin) 
+    a. Buatlah tabel frekuensi untuk rumah sakit menurut tipe kontrolnya. 
+    b. Buatlah tabel proporsi untuk rumah sakit menurut tipe kontrolnya. 
+    c. Tuliskan hipotesa null dan hipotesa alternatif untuk uji kesamaan proporsi rumah sakit menurut tipe kontrolnya. Asumsikan proporsi keempat tipe tersebut sama (25%). 
+    d. Lakukan uji hipotesa kesamaan proporsi dan tuliskan kesimpulannya.
+3. (40 poin) 
+    a. Buatlah tabel frekuensi kontinjensi 2 arah untuk rumah sakit menurut tipe **Control** dan **Service**.
+    b. Tuliskan hipotesa null dan hipotesa alternatif untuk uji independensi antara **Control** dan **Service**. 
+    c. Lakukan uji hipotesa independensi 2 variabel kategorikal dan tuliskan kesimpulannya.
+
+
+# Jawaban
+
+```{r}
+#1--------------
+#panggil library yang diperlukan
+
+#impor data
+
+
+#ubah tipe variabel
+
+
+#2-------------
+
+#a Buatlah tabel frekuensi-----------
+
+
+#b Buatlah tabel proporsi------
+
+
+#c Tuliskan H0 dan Ha----------
+#H0: 
+#Ha: 
+
+#d. Uji hipotesa kesamaan proporsi--------
+
+
+#Kesimpulan: 
+#Pada data: proporsi paling tinggi adalah rumah sakit ...
+#Pada data: proporsi terendah adalah rumah sakit ...
+
+#3------------
+
+#a Buatlah tabel frekuensi-----------
+
+
+
+#b Tuliskan H0 dan Ha----------
+#H0: 
+#Ha: 
+
+#c. Uji independensi
+
+
+#Kesimpulan: .... terdapat hubungan antara tipe kontrol dan jenis layanan
+#Pada data: secara umum jumlah rumah sakit umum .... jumlah rumah sakit jiwa.
+#Pada data: rasio antara RSU dan RSJ paling mencolok terdapat pada tipe ....
+
+
+
+```
+
+

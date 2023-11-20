@@ -1,0 +1,112 @@
+---
+title: "IS240 Lab 8: ANOVA"
+author: "Tan Thing Heng"
+output:
+  pdf_document: 
+    fig_height: 4.5
+    fig_width: 6
+    highlight: tango
+    number_sections: yes
+    toc_depth: 4
+  html_document: 
+    number_sections: yes
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************
+Topik    | ANOVA
+---------|----------             
+Pertemuan| 8   
+Nama     |           
+Kelas    |       
+NIM      |    
+Tanggal  | 2020-03
+Waktu    | maks 100 menit     
+******************************************************
+
+# Pendahuluan
+
+## Tujuan Pembelajaran
+
+- Mahasiswa mampu melakukan estimasi dan inferensi rata-rata populasi dari sampel. 
+
+## Topik Praktikum
+
+- ANOVA (One-way ANOVA)
+
+
+## Petunjuk 
+
+1. Save as file Rmd dengan format  IS240NamaKelas_Lab8_NamaLengkap_NIM.Rmd dan ketikkan jawaban anda pada file tersebut. Contoh: **IS240B_Lab8_KenDedes_000000123456.Rmd**. 
+2. Gunakan file tutorial/ cheat sheet sebagai bahan referensi anda. File-file tersebut dapat diunduh dari Dropbox folder TutorialManual atau dari elearning.    
+- **2RTutorialTTH2018DescriptiveStatistics.pdf**,
+- **2RTutorialTTHHypothesisTesting.pdf**
+3. Mahasiswa mengunggah file jawaban ke https://elearning.umn.ac.id pada waktu yang telah ditentukan. 
+4. Kerjakan soal secara berurutan. Soal nomor 1.2 hanya boleh dikerjakan bila soal nomor 1.1 sudah selesai dan seterusnya. Penilaian akan dilakukan berdasarkan urutan soal yang dikerjakan. Nilai masing-masing bagian adalah 10 poin.
+
+
+# Pertanyaan
+
+Data berikut ini adalah hasil evaluasi para manajer yang mengikut seminar 3 hari. Nilai rating berkisar dari 1 (buruk sekali) sampai dengan 10 (baik sekali). 
+
+a. Panggil semua package yang diperlukan. Impor data dari file **labdata.xlsx** sheet **manager** dan simpan ke dalam data frame **manager**.
+b. Lakukan analisa awal dengan menggunakan statistika deskriptif seperti contoh pada modul lab.
+c. Lakukan pengecekan asumsi ANOVA. Apa yang dapat anda simpulkan?
+d. Lakukan uji ANOVA pada tingkat signifikansi 5%. Tuliskan kesimpulan anda. 
+e. Bila diperlukan, lakukan uji Tukey-Kramer untuk mengecek mean mana yang berbeda. Mean manakah yang berbeda?
+
+## Jawaban
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----------
+
+
+#b-------------
+
+
+
+#c------------
+
+
+#d------------
+
+
+
+#e---------------
+
+
+```
+
+
+# Pertanyaan
+
+Data berikut ini adalah biaya transportasi di beberapa kota di Amerika Serikat. Angka dalam USD.
+
+a. Impor data dari file **labdata.xlsx** sheet **tranportationcost** dan simpan ke dalam data frame **cost**.
+b. Lakukan analisa awal dengan menggunakan statistika deskriptif seperti contoh pada modul lab.
+c. Lakukan pengecekan asumsi ANOVA. Apa yang dapat anda simpulkan?
+d. Lakukan uji ANOVA pada tingkat signifikansi 5%. Tuliskan kesimpulan anda. 
+e. Bila diperlukan, lakukan uji Tukey HSD untuk mengecek mean mana yang berbeda. Mean manakah yang berbeda?
+
+## Jawaban
+
+```{r, warning=FALSE, message=FALSE}
+#a-----------
+
+#b-------------
+
+
+#c------------
+
+#d------------
+
+#e---------------
+
+```
+
+
+
